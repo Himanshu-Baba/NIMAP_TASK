@@ -1,0 +1,111 @@
+﻿
+@model List<CRUD.Models.Product>
+
+@{
+    ViewBag.Title = "Products";
+}
+
+<h2>Products</h2>
+<style>
+    .tbl {
+        margin-left: auto;
+    }
+
+    table th {
+        background-color: #A4C2F4;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align:center;
+    }
+
+    span {
+        text-decoration: none;
+        border: 1px solid black;
+        padding: 7px;
+        background-color: #A4C2F4;
+    }
+
+    .p {
+        text-align:center;
+    }
+        .p a {
+            text-align: center;
+            text-decoration: none;
+            border: 1px solid black;
+            padding: 7px;
+        }
+
+    td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+</style>
+<table class="table tbl">
+    <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Category ID</th>
+            <th>Category Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.ProductId</td>
+                <td>@product.ProductName</td>
+                <td>@product.CategoryId</td>
+                <td>@product.CategoryName</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = product.ProductId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = product.ProductId })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="p">
+@{
+    // Calculate total number of pages
+    int pageSize = 5; // Change this according to your page size
+    int totalProducts = ViewBag.TotalProducts; // Assuming you're passing total product count from controller
+    int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+
+    // Determine current page
+    int currentPage = ViewBag.CurrentPage;
+
+    // Previous page button
+    if (currentPage > 1)
+    {
+        <a href="@Url.Action("Index", "Product", new { page = currentPage - 1, pageSize })">Previous</a>
+    }
+
+    // Page numbers
+    for (int i = 1; i <= totalPages; i++)
+    {
+        if (i == currentPage)
+        {
+            <span>@i</span> // Current page is not clickable
+        }
+        else
+        {
+            <a href="@Url.Action("Index", "Product", new { page = i, pageSize })">@i</a>
+        }
+    }
+
+    // Next page button
+    if (currentPage < totalPages)
+    {
+    <a class="aa" href="@Url.Action("Index", "Product", new { page = currentPage + 1, pageSize })">Next</a>
+    }
+}
+    </div>
+<br /><br />
+
+@Html.ActionLink("Create New Product", "Create")
+
+
